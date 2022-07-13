@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "925163040940",
+    "firebase_url": "https://journalapps-c0e9e.firebaseio.com",
+    "project_id": "journalapps-c0e9e",
+    "storage_bucket": "journalapps-c0e9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925163040940:android:8f4953a2ece7e46d172f09",
+        "android_client_info": {
+          "package_name": "me.soanes.fatiguerecorder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925163040940-b450f71gpacuuercl104jmkl2ejfi017.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7G6qG2SVGNwwySX0KvZTonFuuD4hZpTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925163040940-b450f71gpacuuercl104jmkl2ejfi017.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "925163040940-h7tukc8te9prr8fpub6iuk0muqs6nv3d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "me.soanes.journal"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925163040940:android:6a3649b9e4071ade172f09",
+        "android_client_info": {
+          "package_name": "me.soanes.sniffsocial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925163040940-b450f71gpacuuercl104jmkl2ejfi017.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7G6qG2SVGNwwySX0KvZTonFuuD4hZpTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925163040940-b450f71gpacuuercl104jmkl2ejfi017.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "925163040940-h7tukc8te9prr8fpub6iuk0muqs6nv3d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "me.soanes.journal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

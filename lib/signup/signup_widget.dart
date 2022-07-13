@@ -48,12 +48,14 @@ class _SignupWidgetState extends State<SignupWidget> {
             children: [
               Row(
                 mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/images/logoTranslation@3x.png',
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
+                  Text(
+                    'Fatigue Tracker',
+                    style: FlutterFlowTheme.of(context).title1.override(
+                          fontFamily: 'Poppins',
+                          color: Color(0xFF2E295C),
+                        ),
                   ),
                 ],
               ),
@@ -223,47 +225,131 @@ class _SignupWidgetState extends State<SignupWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
-                child: TextFormField(
-                  controller: confirmPasswordTextController,
-                  obscureText: !passwordVisibility2,
-                  decoration: InputDecoration(
-                    labelText: 'confirm Password',
-                    labelStyle: FlutterFlowTheme.of(context).bodyText2,
-                    hintStyle: FlutterFlowTheme.of(context).bodyText2,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00000000),
-                        width: 1,
+                padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 6,
+                        color: Color(0x3416202A),
+                        offset: Offset(0, 2),
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
+                    child: TextFormField(
+                      controller: confirmPasswordTextController,
+                      obscureText: !passwordVisibility2,
+                      decoration: InputDecoration(
+                        labelText: 'Confirm Password',
+                        labelStyle: FlutterFlowTheme.of(context).bodyText2,
+                        hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor:
+                            FlutterFlowTheme.of(context).secondaryBackground,
+                        contentPadding:
+                            EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
+                        suffixIcon: InkWell(
+                          onTap: () => setState(
+                            () => passwordVisibility2 = !passwordVisibility2,
+                          ),
+                          focusNode: FocusNode(skipTraversal: true),
+                          child: Icon(
+                            passwordVisibility2
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: FlutterFlowTheme.of(context).secondaryText,
+                            size: 22,
+                          ),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0x00000000),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
-                    contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
-                    suffixIcon: InkWell(
-                      onTap: () => setState(
-                        () => passwordVisibility2 = !passwordVisibility2,
-                      ),
-                      focusNode: FocusNode(skipTraversal: true),
-                      child: Icon(
-                        passwordVisibility2
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        color: FlutterFlowTheme.of(context).secondaryText,
-                        size: 22,
-                      ),
+                      style: FlutterFlowTheme.of(context).bodyText1,
                     ),
                   ),
-                  style: FlutterFlowTheme.of(context).bodyText1,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FFButtonWidget(
+                      onPressed: () async {
+                        if (passwordTextController?.text !=
+                            confirmPasswordTextController?.text) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Passwords don\'t match!',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+
+                        final user = await createAccountWithEmail(
+                          context,
+                          emailTextController.text,
+                          passwordTextController.text,
+                        );
+                        if (user == null) {
+                          return;
+                        }
+
+                        final usersCreateData = createUsersRecordData(
+                          email: '',
+                        );
+                        await UsersRecord.collection
+                            .doc(user.uid)
+                            .update(usersCreateData);
+
+                        await Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FatiguelistWidget(),
+                          ),
+                          (r) => false,
+                        );
+                      },
+                      text: 'Sign up',
+                      options: FFButtonOptions(
+                        width: 150,
+                        height: 50,
+                        color: Color(0xFF2E295C),
+                        textStyle:
+                            FlutterFlowTheme.of(context).subtitle2.override(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                        elevation: 3,
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -328,72 +414,6 @@ class _SignupWidgetState extends State<SignupWidget> {
                             (r) => false,
                           );
                         },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FFButtonWidget(
-                      onPressed: () async {
-                        if (passwordTextController?.text !=
-                            confirmPasswordTextController?.text) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Passwords don\'t match!',
-                              ),
-                            ),
-                          );
-                          return;
-                        }
-
-                        final user = await createAccountWithEmail(
-                          context,
-                          emailTextController.text,
-                          passwordTextController.text,
-                        );
-                        if (user == null) {
-                          return;
-                        }
-
-                        final usersCreateData = createUsersRecordData(
-                          email: '',
-                        );
-                        await UsersRecord.collection
-                            .doc(user.uid)
-                            .update(usersCreateData);
-
-                        await Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FatiguelistWidget(),
-                          ),
-                          (r) => false,
-                        );
-                      },
-                      text: 'Sign up',
-                      options: FFButtonOptions(
-                        width: 150,
-                        height: 50,
-                        color: FlutterFlowTheme.of(context).primaryColor,
-                        textStyle:
-                            FlutterFlowTheme.of(context).subtitle2.override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                        elevation: 3,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1,
-                        ),
                       ),
                     ),
                   ],

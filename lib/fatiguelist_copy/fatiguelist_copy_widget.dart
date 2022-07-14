@@ -1,11 +1,11 @@
 import '../auth/firebase_user_provider.dart';
 import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
-import '../flutter_flow/flutter_flow_google_map.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../login/login_widget.dart';
+import '../maps/maps_widget.dart';
 import '../settings/settings_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -20,11 +20,8 @@ class FatiguelistCopyWidget extends StatefulWidget {
 
 class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
     with TickerProviderStateMixin {
-  LatLng googleMapsCenter;
-  final googleMapsController = Completer<GoogleMapController>();
   TextEditingController textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  LatLng currentUserLocationValue;
   final animationsMap = {
     'containerOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
@@ -64,8 +61,6 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
       );
     });
 
-    getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
-        .then((loc) => setState(() => currentUserLocationValue = loc));
     textController = TextEditingController();
     startPageLoadAnimations(
       animationsMap.values
@@ -76,20 +71,8 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (currentUserLocationValue == null) {
-      return Center(
-        child: SizedBox(
-          width: 50,
-          height: 50,
-          child: CircularProgressIndicator(
-            color: FlutterFlowTheme.of(context).primaryColor,
-          ),
-        ),
-      );
-    }
     return Scaffold(
       key: scaffoldKey,
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Color(0xFF2E295C),
         automaticallyImplyLeading: false,
@@ -141,8 +124,13 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
       ),
       backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('FloatingActionButton pressed ...');
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MapsWidget(),
+            ),
+          );
         },
         backgroundColor: Color(0xFF2E295C),
         elevation: 8,
@@ -418,31 +406,11 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
                                                     decoration: BoxDecoration(
                                                       color: Color(0xFFEEEEEE),
                                                     ),
-                                                    child: FlutterFlowGoogleMap(
-                                                      controller:
-                                                          googleMapsController,
-                                                      onCameraIdle: (latLng) =>
-                                                          googleMapsCenter =
-                                                              latLng,
-                                                      initialLocation:
-                                                          googleMapsCenter ??=
-                                                              currentUserLocationValue,
-                                                      markerColor:
-                                                          GoogleMarkerColor
-                                                              .violet,
-                                                      mapType: MapType.normal,
-                                                      style: GoogleMapStyle
-                                                          .standard,
-                                                      initialZoom: 14,
-                                                      allowInteraction: false,
-                                                      allowZoom: true,
-                                                      showZoomControls: true,
-                                                      showLocation: false,
-                                                      showCompass: false,
-                                                      showMapToolbar: false,
-                                                      showTraffic: false,
-                                                      centerMapOnMarkerTap:
-                                                          true,
+                                                    child: Image.network(
+                                                      'https://picsum.photos/seed/358/600',
+                                                      width: 100,
+                                                      height: 100,
+                                                      fit: BoxFit.cover,
                                                     ),
                                                   ),
                                                 ],

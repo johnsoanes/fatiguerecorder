@@ -1,6 +1,7 @@
 import '../auth/firebase_user_provider.dart';
 import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
+import '../flutter_flow/flutter_flow_google_map.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -19,6 +20,8 @@ class FatiguelistCopyWidget extends StatefulWidget {
 
 class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
     with TickerProviderStateMixin {
+  LatLng googleMapsCenter;
+  final googleMapsController = Completer<GoogleMapController>();
   TextEditingController textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final animationsMap = {
@@ -72,6 +75,7 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Color(0xFF2E295C),
         automaticallyImplyLeading: false,
@@ -394,23 +398,38 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
                                                       ),
                                                     ),
                                                   ),
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      bottomLeft:
-                                                          Radius.circular(0),
-                                                      bottomRight:
-                                                          Radius.circular(12),
-                                                      topLeft:
-                                                          Radius.circular(0),
-                                                      topRight:
-                                                          Radius.circular(12),
+                                                  Container(
+                                                    width: 100,
+                                                    height: 100,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFFEEEEEE),
                                                     ),
-                                                    child: Image.network(
-                                                      'https://platform.cstatic-images.com/large/in/v2/stock_photos/af7f32d6-41d2-4a67-bd6e-49e188d0a7fb/3de60623-b1df-44e7-9da6-53129a69039c.png',
-                                                      width: 160,
-                                                      height: 100,
-                                                      fit: BoxFit.cover,
+                                                    child: FlutterFlowGoogleMap(
+                                                      controller:
+                                                          googleMapsController,
+                                                      onCameraIdle: (latLng) =>
+                                                          googleMapsCenter =
+                                                              latLng,
+                                                      initialLocation:
+                                                          googleMapsCenter ??=
+                                                              LatLng(13.106061,
+                                                                  -59.613158),
+                                                      markerColor:
+                                                          GoogleMarkerColor
+                                                              .violet,
+                                                      mapType: MapType.normal,
+                                                      style: GoogleMapStyle
+                                                          .standard,
+                                                      initialZoom: 14,
+                                                      allowInteraction: false,
+                                                      allowZoom: true,
+                                                      showZoomControls: true,
+                                                      showLocation: true,
+                                                      showCompass: false,
+                                                      showMapToolbar: false,
+                                                      showTraffic: false,
+                                                      centerMapOnMarkerTap:
+                                                          true,
                                                     ),
                                                   ),
                                                 ],

@@ -9,17 +9,10 @@ import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
 import 'index.dart';
-import 'flutter_flow/revenue_cat_util.dart' as revenue_cat;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  await revenue_cat.initialize(
-    "623Q6WVU57",
-    "",
-    false,
-  );
 
   runApp(MyApp());
 }
@@ -41,9 +34,7 @@ class _MyAppState extends State<MyApp> {
   FatigueRecorderFirebaseUser initialUser;
   bool displaySplashImage = true;
 
-  final authUserSub = authenticatedUserStream.listen((user) {
-    revenue_cat.login(user?.uid);
-  });
+  final authUserSub = authenticatedUserStream.listen((_) {});
 
   @override
   void initState() {

@@ -24,6 +24,7 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
   final googleMapsController = Completer<GoogleMapController>();
   TextEditingController textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  LatLng currentUserLocationValue;
   final animationsMap = {
     'containerOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
@@ -63,6 +64,8 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
       );
     });
 
+    getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
+        .then((loc) => setState(() => currentUserLocationValue = loc));
     textController = TextEditingController();
     startPageLoadAnimations(
       animationsMap.values
@@ -73,6 +76,17 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (currentUserLocationValue == null) {
+      return Center(
+        child: SizedBox(
+          width: 50,
+          height: 50,
+          child: CircularProgressIndicator(
+            color: FlutterFlowTheme.of(context).primaryColor,
+          ),
+        ),
+      );
+    }
     return Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: false,
@@ -412,8 +426,7 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
                                                               latLng,
                                                       initialLocation:
                                                           googleMapsCenter ??=
-                                                              LatLng(13.106061,
-                                                                  -59.613158),
+                                                              currentUserLocationValue,
                                                       markerColor:
                                                           GoogleMarkerColor
                                                               .violet,
@@ -424,7 +437,7 @@ class _FatiguelistCopyWidgetState extends State<FatiguelistCopyWidget>
                                                       allowInteraction: false,
                                                       allowZoom: true,
                                                       showZoomControls: true,
-                                                      showLocation: true,
+                                                      showLocation: false,
                                                       showCompass: false,
                                                       showMapToolbar: false,
                                                       showTraffic: false,

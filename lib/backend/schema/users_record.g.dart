@@ -61,6 +61,13 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.latlng;
+    if (value != null) {
+      result
+        ..add('latlng')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(LatLng)));
+    }
     value = object.reference;
     if (value != null) {
       result
@@ -107,6 +114,10 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
           result.phoneNumber = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'latlng':
+          result.latlng = serializers.deserialize(value,
+              specifiedType: const FullType(LatLng)) as LatLng;
+          break;
         case 'Document__Reference__Field':
           result.reference = serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -134,6 +145,8 @@ class _$UsersRecord extends UsersRecord {
   @override
   final String phoneNumber;
   @override
+  final LatLng latlng;
+  @override
   final DocumentReference<Object> reference;
 
   factory _$UsersRecord([void Function(UsersRecordBuilder) updates]) =>
@@ -146,6 +159,7 @@ class _$UsersRecord extends UsersRecord {
       this.uid,
       this.createdTime,
       this.phoneNumber,
+      this.latlng,
       this.reference})
       : super._();
 
@@ -166,6 +180,7 @@ class _$UsersRecord extends UsersRecord {
         uid == other.uid &&
         createdTime == other.createdTime &&
         phoneNumber == other.phoneNumber &&
+        latlng == other.latlng &&
         reference == other.reference;
   }
 
@@ -175,11 +190,13 @@ class _$UsersRecord extends UsersRecord {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, email.hashCode), displayName.hashCode),
-                        photoUrl.hashCode),
-                    uid.hashCode),
-                createdTime.hashCode),
-            phoneNumber.hashCode),
+                    $jc(
+                        $jc($jc($jc(0, email.hashCode), displayName.hashCode),
+                            photoUrl.hashCode),
+                        uid.hashCode),
+                    createdTime.hashCode),
+                phoneNumber.hashCode),
+            latlng.hashCode),
         reference.hashCode));
   }
 
@@ -192,6 +209,7 @@ class _$UsersRecord extends UsersRecord {
           ..add('uid', uid)
           ..add('createdTime', createdTime)
           ..add('phoneNumber', phoneNumber)
+          ..add('latlng', latlng)
           ..add('reference', reference))
         .toString();
   }
@@ -224,6 +242,10 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   String get phoneNumber => _$this._phoneNumber;
   set phoneNumber(String phoneNumber) => _$this._phoneNumber = phoneNumber;
 
+  LatLng _latlng;
+  LatLng get latlng => _$this._latlng;
+  set latlng(LatLng latlng) => _$this._latlng = latlng;
+
   DocumentReference<Object> _reference;
   DocumentReference<Object> get reference => _$this._reference;
   set reference(DocumentReference<Object> reference) =>
@@ -242,6 +264,7 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
       _uid = $v.uid;
       _createdTime = $v.createdTime;
       _phoneNumber = $v.phoneNumber;
+      _latlng = $v.latlng;
       _reference = $v.reference;
       _$v = null;
     }
@@ -269,6 +292,7 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
             uid: uid,
             createdTime: createdTime,
             phoneNumber: phoneNumber,
+            latlng: latlng,
             reference: reference);
     replace(_$result);
     return _$result;

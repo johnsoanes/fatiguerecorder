@@ -18,6 +18,9 @@ abstract class FatigueListRecord
   String get mood;
 
   @nullable
+  LatLng get latlng;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -48,9 +51,11 @@ abstract class FatigueListRecord
 Map<String, dynamic> createFatigueListRecordData({
   DateTime date,
   String mood,
+  LatLng latlng,
 }) =>
     serializers.toFirestore(
         FatigueListRecord.serializer,
         FatigueListRecord((f) => f
           ..date = date
-          ..mood = mood));
+          ..mood = mood
+          ..latlng = latlng));

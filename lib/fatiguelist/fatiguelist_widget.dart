@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class FatiguelistWidget extends StatefulWidget {
   const FatiguelistWidget({Key key}) : super(key: key);
@@ -19,6 +20,10 @@ class FatiguelistWidget extends StatefulWidget {
 }
 
 class _FatiguelistWidgetState extends State<FatiguelistWidget> {
+  PagingController<DocumentSnapshot, FatigueListRecord> _pagingController;
+  Query _pagingQuery;
+  List<StreamSubscription> _streamSubscriptions = [];
+
   TextEditingController textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -43,6 +48,12 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
     });
 
     textController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _streamSubscriptions.forEach((s) => s?.cancel());
+    super.dispose();
   }
 
   @override
@@ -220,141 +231,190 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      StreamBuilder<List<FatigueListRecord>>(
-                        stream: queryFatigueListRecord(
-                          queryBuilder: (fatigueListRecord) =>
-                              fatigueListRecord.orderBy('date'),
-                        ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: CircularProgressIndicator(
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryColor,
+                      PagedListView<DocumentSnapshot<Object>,
+                          FatigueListRecord>(
+                        pagingController: () {
+                          final Query<Object> Function(Query<Object>)
+                              queryBuilder = (fatigueListRecord) =>
+                                  fatigueListRecord.orderBy('date');
+                          if (_pagingController != null) {
+                            final query =
+                                queryBuilder(FatigueListRecord.collection);
+                            if (query != _pagingQuery) {
+                              // The query has changed
+                              _pagingQuery = query;
+                              _streamSubscriptions.forEach((s) => s?.cancel());
+                              _streamSubscriptions.clear();
+                              _pagingController.refresh();
+                            }
+                            return _pagingController;
+                          }
+
+                          _pagingController =
+                              PagingController(firstPageKey: null);
+                          _pagingQuery =
+                              queryBuilder(FatigueListRecord.collection);
+                          _pagingController
+                              .addPageRequestListener((nextPageMarker) {
+                            queryFatigueListRecordPage(
+                              queryBuilder: (fatigueListRecord) =>
+                                  fatigueListRecord.orderBy('date'),
+                              nextPageMarker: nextPageMarker,
+                              pageSize: 25,
+                              isStream: true,
+                            ).then((page) {
+                              _pagingController.appendPage(
+                                page.data,
+                                page.nextPageMarker,
+                              );
+                              final streamSubscription =
+                                  page.dataStream?.listen((data) {
+                                final itemIndexes = _pagingController.itemList
+                                    .asMap()
+                                    .map((k, v) => MapEntry(v.reference.id, k));
+                                data.forEach((item) {
+                                  final index = itemIndexes[item.reference.id];
+                                  final items = _pagingController.itemList;
+                                  if (index != null) {
+                                    items
+                                        .replaceRange(index, index + 1, [item]);
+                                    _pagingController.itemList = {
+                                      for (var item in items)
+                                        item.reference: item
+                                    }.values.toList();
+                                  }
+                                });
+                                setState(() {});
+                              });
+                              _streamSubscriptions.add(streamSubscription);
+                            });
+                          });
+                          return _pagingController;
+                        }(),
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        builderDelegate:
+                            PagedChildBuilderDelegate<FatigueListRecord>(
+                          // Customize what your widget looks like when it's loading the first page.
+                          firstPageProgressIndicatorBuilder: (_) => Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: CircularProgressIndicator(
+                                color:
+                                    FlutterFlowTheme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
+
+                          itemBuilder: (context, _, listViewIndex) {
+                            final listViewFatigueListRecord =
+                                _pagingController.itemList[listViewIndex];
+                            return Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
+                              child: InkWell(
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          FatiguedetailWidget(),
+                                    ),
+                                  );
+                                },
+                                child: Slidable(
+                                  actionPane: const SlidableScrollActionPane(),
+                                  secondaryActions: [
+                                    IconSlideAction(
+                                      caption: 'delete',
+                                      color: FlutterFlowTheme.of(context)
+                                          .alternate,
+                                      icon: Icons.delete_forever_outlined,
+                                      onTap: () async {
+                                        var confirmDialogResponse =
+                                            await showDialog<bool>(
+                                                  context: context,
+                                                  builder:
+                                                      (alertDialogContext) {
+                                                    return AlertDialog(
+                                                      title:
+                                                          Text('Delete Entry'),
+                                                      content: Text(
+                                                          'Do you wish to delete?'),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  alertDialogContext,
+                                                                  false),
+                                                          child: Text('Cancel'),
+                                                        ),
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  alertDialogContext,
+                                                                  true),
+                                                          child:
+                                                              Text('Confirm'),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                ) ??
+                                                false;
+                                        if (confirmDialogResponse) {
+                                          return;
+                                        }
+
+                                        return;
+                                      },
+                                    ),
+                                    IconSlideAction(
+                                      caption: 'Share',
+                                      color: Colors.blue,
+                                      icon: Icons.share,
+                                      onTap: () {
+                                        print(
+                                            'SlidableActionWidget pressed ...');
+                                      },
+                                    ),
+                                  ],
+                                  child: ListTile(
+                                    title: Text(
+                                      dateTimeFormat('MMMMEEEEd',
+                                          listViewFatigueListRecord.date),
+                                      style: FlutterFlowTheme.of(context)
+                                          .title3
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                    ),
+                                    subtitle: Text(
+                                      dateTimeFormat('jms',
+                                          listViewFatigueListRecord.date),
+                                      style: FlutterFlowTheme.of(context)
+                                          .subtitle2
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                    ),
+                                    trailing: Icon(
+                                      Icons.chevron_right,
+                                      color: Color(0xFF2E295C),
+                                      size: 20,
+                                    ),
+                                    tileColor: Color(0xFFF5F5F5),
+                                    dense: false,
+                                  ),
                                 ),
                               ),
                             );
-                          }
-                          List<FatigueListRecord>
-                              listViewFatigueListRecordList = snapshot.data;
-                          return ListView.builder(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: listViewFatigueListRecordList.length,
-                            itemBuilder: (context, listViewIndex) {
-                              final listViewFatigueListRecord =
-                                  listViewFatigueListRecordList[listViewIndex];
-                              return Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
-                                child: InkWell(
-                                  onTap: () async {
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            FatiguedetailWidget(),
-                                      ),
-                                    );
-                                  },
-                                  child: Slidable(
-                                    actionPane:
-                                        const SlidableScrollActionPane(),
-                                    secondaryActions: [
-                                      IconSlideAction(
-                                        caption: 'delete',
-                                        color: FlutterFlowTheme.of(context)
-                                            .alternate,
-                                        icon: Icons.delete_forever_outlined,
-                                        onTap: () async {
-                                          var confirmDialogResponse =
-                                              await showDialog<bool>(
-                                                    context: context,
-                                                    builder:
-                                                        (alertDialogContext) {
-                                                      return AlertDialog(
-                                                        title: Text(
-                                                            'Delete Entry'),
-                                                        content: Text(
-                                                            'Do you wish to delete?'),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext,
-                                                                    false),
-                                                            child:
-                                                                Text('Cancel'),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext,
-                                                                    true),
-                                                            child:
-                                                                Text('Confirm'),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  ) ??
-                                                  false;
-                                          if (confirmDialogResponse) {
-                                            return;
-                                          }
-
-                                          return;
-                                        },
-                                      ),
-                                      IconSlideAction(
-                                        caption: 'Share',
-                                        color: Colors.blue,
-                                        icon: Icons.share,
-                                        onTap: () {
-                                          print(
-                                              'SlidableActionWidget pressed ...');
-                                        },
-                                      ),
-                                    ],
-                                    child: ListTile(
-                                      title: Text(
-                                        dateTimeFormat('relative',
-                                            listViewFatigueListRecord.date),
-                                        style: FlutterFlowTheme.of(context)
-                                            .title3
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                      ),
-                                      subtitle: Text(
-                                        listViewFatigueListRecord.mood,
-                                        style: FlutterFlowTheme.of(context)
-                                            .subtitle2
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                      ),
-                                      trailing: Icon(
-                                        Icons.chevron_right,
-                                        color: Color(0xFF2E295C),
-                                        size: 20,
-                                      ),
-                                      tileColor: Color(0xFFF5F5F5),
-                                      dense: false,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
+                          },
+                        ),
                       ),
                     ],
                   ),

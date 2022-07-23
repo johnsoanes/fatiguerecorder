@@ -35,12 +35,27 @@ class _$FatigueListRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.latlng;
+    value = object.location;
     if (value != null) {
       result
-        ..add('latlng')
+        ..add('location')
         ..add(serializers.serialize(value,
-            specifiedType: const FullType(LatLng)));
+            specifiedType: const FullType(String)));
+    }
+    value = object.uid;
+    if (value != null) {
+      result
+        ..add('uid')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.userreference;
+    if (value != null) {
+      result
+        ..add('userreference')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType(Object)])));
     }
     value = object.reference;
     if (value != null) {
@@ -73,9 +88,19 @@ class _$FatigueListRecordSerializer
           result.mood = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'latlng':
-          result.latlng = serializers.deserialize(value,
-              specifiedType: const FullType(LatLng)) as LatLng;
+        case 'location':
+          result.location = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'uid':
+          result.uid = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'userreference':
+          result.userreference = serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      DocumentReference, const [const FullType(Object)]))
+              as DocumentReference<Object>;
           break;
         case 'Document__Reference__Field':
           result.reference = serializers.deserialize(value,
@@ -96,7 +121,11 @@ class _$FatigueListRecord extends FatigueListRecord {
   @override
   final String mood;
   @override
-  final LatLng latlng;
+  final String location;
+  @override
+  final String uid;
+  @override
+  final DocumentReference<Object> userreference;
   @override
   final DocumentReference<Object> reference;
 
@@ -104,7 +133,13 @@ class _$FatigueListRecord extends FatigueListRecord {
           [void Function(FatigueListRecordBuilder) updates]) =>
       (new FatigueListRecordBuilder()..update(updates)).build();
 
-  _$FatigueListRecord._({this.date, this.mood, this.latlng, this.reference})
+  _$FatigueListRecord._(
+      {this.date,
+      this.mood,
+      this.location,
+      this.uid,
+      this.userreference,
+      this.reference})
       : super._();
 
   @override
@@ -121,14 +156,21 @@ class _$FatigueListRecord extends FatigueListRecord {
     return other is FatigueListRecord &&
         date == other.date &&
         mood == other.mood &&
-        latlng == other.latlng &&
+        location == other.location &&
+        uid == other.uid &&
+        userreference == other.userreference &&
         reference == other.reference;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, date.hashCode), mood.hashCode), latlng.hashCode),
+        $jc(
+            $jc(
+                $jc($jc($jc(0, date.hashCode), mood.hashCode),
+                    location.hashCode),
+                uid.hashCode),
+            userreference.hashCode),
         reference.hashCode));
   }
 
@@ -137,7 +179,9 @@ class _$FatigueListRecord extends FatigueListRecord {
     return (newBuiltValueToStringHelper('FatigueListRecord')
           ..add('date', date)
           ..add('mood', mood)
-          ..add('latlng', latlng)
+          ..add('location', location)
+          ..add('uid', uid)
+          ..add('userreference', userreference)
           ..add('reference', reference))
         .toString();
   }
@@ -155,9 +199,18 @@ class FatigueListRecordBuilder
   String get mood => _$this._mood;
   set mood(String mood) => _$this._mood = mood;
 
-  LatLng _latlng;
-  LatLng get latlng => _$this._latlng;
-  set latlng(LatLng latlng) => _$this._latlng = latlng;
+  String _location;
+  String get location => _$this._location;
+  set location(String location) => _$this._location = location;
+
+  String _uid;
+  String get uid => _$this._uid;
+  set uid(String uid) => _$this._uid = uid;
+
+  DocumentReference<Object> _userreference;
+  DocumentReference<Object> get userreference => _$this._userreference;
+  set userreference(DocumentReference<Object> userreference) =>
+      _$this._userreference = userreference;
 
   DocumentReference<Object> _reference;
   DocumentReference<Object> get reference => _$this._reference;
@@ -173,7 +226,9 @@ class FatigueListRecordBuilder
     if ($v != null) {
       _date = $v.date;
       _mood = $v.mood;
-      _latlng = $v.latlng;
+      _location = $v.location;
+      _uid = $v.uid;
+      _userreference = $v.userreference;
       _reference = $v.reference;
       _$v = null;
     }
@@ -195,7 +250,12 @@ class FatigueListRecordBuilder
   _$FatigueListRecord build() {
     final _$result = _$v ??
         new _$FatigueListRecord._(
-            date: date, mood: mood, latlng: latlng, reference: reference);
+            date: date,
+            mood: mood,
+            location: location,
+            uid: uid,
+            userreference: userreference,
+            reference: reference);
     replace(_$result);
     return _$result;
   }

@@ -18,14 +18,22 @@ abstract class FatigueListRecord
   String get mood;
 
   @nullable
-  LatLng get latlng;
+  String get location;
+
+  @nullable
+  String get uid;
+
+  @nullable
+  DocumentReference get userreference;
 
   @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
-  static void _initializeBuilder(FatigueListRecordBuilder builder) =>
-      builder..mood = '';
+  static void _initializeBuilder(FatigueListRecordBuilder builder) => builder
+    ..mood = ''
+    ..location = ''
+    ..uid = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('fatigueList');
@@ -51,11 +59,15 @@ abstract class FatigueListRecord
 Map<String, dynamic> createFatigueListRecordData({
   DateTime date,
   String mood,
-  LatLng latlng,
+  String location,
+  String uid,
+  DocumentReference userreference,
 }) =>
     serializers.toFirestore(
         FatigueListRecord.serializer,
         FatigueListRecord((f) => f
           ..date = date
           ..mood = mood
-          ..latlng = latlng));
+          ..location = location
+          ..uid = uid
+          ..userreference = userreference));

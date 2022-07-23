@@ -78,38 +78,41 @@ class _AddendtryWidgetState extends State<AddendtryWidget> {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: Icon(
-                  Icons.date_range,
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  size: 30,
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  buttonSize: 60,
+                  icon: Icon(
+                    Icons.date_range,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 30,
+                  ),
+                  onPressed: () async {
+                    await DatePicker.showDateTimePicker(
+                      context,
+                      showTitleActions: true,
+                      onConfirm: (date) {
+                        setState(() => datePicked = date);
+                      },
+                      currentTime: getCurrentTimestamp,
+                      minTime: DateTime(0, 0, 0),
+                    );
+                  },
                 ),
-                onPressed: () async {
-                  await DatePicker.showDatePicker(
-                    context,
-                    showTitleActions: true,
-                    onConfirm: (date) {
-                      setState(() => datePicked = date);
-                    },
-                    currentTime: getCurrentTimestamp,
-                    minTime: DateTime(0, 0, 0),
-                  );
-                },
-              ),
-              Expanded(
-                child: Text(
-                  datePicked.toString(),
-                  style: FlutterFlowTheme.of(context).bodyText1,
+                Expanded(
+                  child: Text(
+                    dateTimeFormat('d/M h:mm a', datePicked),
+                    style: FlutterFlowTheme.of(context).bodyText1,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Align(
             alignment: AlignmentDirectional(0, 0),

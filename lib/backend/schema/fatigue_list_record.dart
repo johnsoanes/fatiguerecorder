@@ -24,7 +24,28 @@ abstract class FatigueListRecord
   String get uid;
 
   @nullable
-  DocumentReference get userreference;
+  String get who;
+
+  @nullable
+  String get whatDoing;
+
+  @nullable
+  bool get setBoundaries;
+
+  @nullable
+  bool get communicateHonestly;
+
+  @nullable
+  bool get meetYourNeeds;
+
+  @nullable
+  bool get overThinking;
+
+  @nullable
+  String get action;
+
+  @nullable
+  bool get didThingsImprove;
 
   @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
@@ -33,7 +54,15 @@ abstract class FatigueListRecord
   static void _initializeBuilder(FatigueListRecordBuilder builder) => builder
     ..mood = ''
     ..location = ''
-    ..uid = '';
+    ..uid = ''
+    ..who = ''
+    ..whatDoing = ''
+    ..setBoundaries = false
+    ..communicateHonestly = false
+    ..meetYourNeeds = false
+    ..overThinking = false
+    ..action = ''
+    ..didThingsImprove = false;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('fatigueList');
@@ -61,7 +90,14 @@ Map<String, dynamic> createFatigueListRecordData({
   String mood,
   String location,
   String uid,
-  DocumentReference userreference,
+  String who,
+  String whatDoing,
+  bool setBoundaries,
+  bool communicateHonestly,
+  bool meetYourNeeds,
+  bool overThinking,
+  String action,
+  bool didThingsImprove,
 }) =>
     serializers.toFirestore(
         FatigueListRecord.serializer,
@@ -70,4 +106,11 @@ Map<String, dynamic> createFatigueListRecordData({
           ..mood = mood
           ..location = location
           ..uid = uid
-          ..userreference = userreference));
+          ..who = who
+          ..whatDoing = whatDoing
+          ..setBoundaries = setBoundaries
+          ..communicateHonestly = communicateHonestly
+          ..meetYourNeeds = meetYourNeeds
+          ..overThinking = overThinking
+          ..action = action
+          ..didThingsImprove = didThingsImprove));

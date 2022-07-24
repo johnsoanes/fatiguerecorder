@@ -7,7 +7,6 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../login/login_widget.dart';
-import '../settings/settings_widget.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -70,15 +69,43 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
             borderWidth: 1,
             buttonSize: 60,
             icon: Icon(
-              Icons.settings,
+              Icons.logout,
               color: FlutterFlowTheme.of(context).primaryBtnText,
               size: 30,
             ),
             onPressed: () async {
+              var confirmDialogResponse = await showDialog<bool>(
+                    context: context,
+                    builder: (alertDialogContext) {
+                      return AlertDialog(
+                        title: Text('Log Out'),
+                        content: Text('Do you  wish to log out'),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.pop(alertDialogContext, false),
+                            child: Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.pop(alertDialogContext, true),
+                            child: Text('Confirm'),
+                          ),
+                        ],
+                      );
+                    },
+                  ) ??
+                  false;
+              if (confirmDialogResponse) {
+                await signOut();
+              } else {
+                return;
+              }
+
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SettingsWidget(),
+                  builder: (context) => LoginWidget(),
                 ),
               );
             },
@@ -361,7 +388,10 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  FatigueDetailWidget(),
+                                                  FatigueDetailWidget(
+                                                firestoreDocument:
+                                                    listViewFatigueListRecord,
+                                              ),
                                             ),
                                           );
                                         },

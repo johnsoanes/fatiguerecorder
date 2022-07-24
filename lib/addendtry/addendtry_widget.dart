@@ -1,17 +1,27 @@
+import '../auth/auth_util.dart';
 import '../auth/firebase_user_provider.dart';
-import '../components/location_bottom_sheet_widget.dart';
+import '../backend/backend.dart';
+import '../fatiguelist/fatiguelist_widget.dart';
+import '../flutter_flow/flutter_flow_drop_down.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../login/login_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AddendtryWidget extends StatefulWidget {
-  const AddendtryWidget({Key key}) : super(key: key);
+  const AddendtryWidget({
+    Key key,
+    this.locationSelected,
+  }) : super(key: key);
+
+  final FFPlace locationSelected;
 
   @override
   _AddendtryWidgetState createState() => _AddendtryWidgetState();
@@ -19,6 +29,17 @@ class AddendtryWidget extends StatefulWidget {
 
 class _AddendtryWidgetState extends State<AddendtryWidget> {
   DateTime datePicked;
+  TextEditingController locationTextFieldController;
+  TextEditingController whoTextFieldController;
+  TextEditingController whatTextFieldController;
+  String emotionDropDownValue;
+  bool boundariesSwitchListTileValue;
+  bool communicateSwitchListTileValue;
+  bool needsSwitchListTileValue;
+  bool thinkingSwitchListTileValue;
+  TextEditingController actionTextFieldController;
+  bool improveSwitchListTileValue;
+  final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -40,6 +61,11 @@ class _AddendtryWidgetState extends State<AddendtryWidget> {
         ),
       );
     });
+
+    actionTextFieldController = TextEditingController();
+    locationTextFieldController = TextEditingController();
+    whoTextFieldController = TextEditingController();
+    whatTextFieldController = TextEditingController();
   }
 
   @override
@@ -94,87 +120,446 @@ class _AddendtryWidgetState extends State<AddendtryWidget> {
               color: Color(0xFF2E295C),
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              InkWell(
-                onTap: () async {
-                  await DatePicker.showDateTimePicker(
-                    context,
-                    showTitleActions: true,
-                    onConfirm: (date) {
-                      setState(() => datePicked = date);
+          child: Form(
+            key: formKey,
+            autovalidateMode: AutovalidateMode.disabled,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      await DatePicker.showDateTimePicker(
+                        context,
+                        showTitleActions: true,
+                        onConfirm: (date) {
+                          setState(() => datePicked = date);
+                        },
+                        currentTime: getCurrentTimestamp,
+                        minTime: DateTime(0, 0, 0),
+                      );
                     },
-                    currentTime: getCurrentTimestamp,
-                    minTime: DateTime(0, 0, 0),
-                  );
-                },
-                child: Material(
-                  color: Colors.transparent,
-                  elevation: 1,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      border: Border.all(
-                        color: Color(0xFF7E2B69),
-                        width: 1,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            'When:',
-                            style:
-                                FlutterFlowTheme.of(context).bodyText1.override(
+                    child: Material(
+                      color: Colors.transparent,
+                      elevation: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          border: Border.all(
+                            color: Color(0xFF7E2B69),
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'When:',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
                                       fontFamily: 'Poppins',
                                       color: Color(0xFF7E2B69),
+                                      fontWeight: FontWeight.normal,
                                     ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(5, 0, 5, 0),
+                                child: Text(
+                                  dateTimeFormat('MMMMEEEEd', datePicked),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(5, 0, 5, 0),
+                                child: Text(
+                                  dateTimeFormat('jm', datePicked),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                ),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(5, 0, 5, 0),
-                            child: Text(
-                              dateTimeFormat('MMMMEEEEd', datePicked),
-                              style: FlutterFlowTheme.of(context).bodyText1,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(5, 0, 5, 0),
-                            child: Text(
-                              dateTimeFormat('jm', datePicked),
-                              style: FlutterFlowTheme.of(context).bodyText1,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                child: InkWell(
-                  onTap: () async {
-                    await showModalBottomSheet(
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      context: context,
-                      builder: (context) {
-                        return Padding(
-                          padding: MediaQuery.of(context).viewInsets,
-                          child: LocationBottomSheetWidget(),
-                        );
-                      },
-                    );
-                  },
-                  child: Material(
-                    color: Colors.transparent,
-                    elevation: 1,
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      elevation: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          border: Border.all(
+                            color: Color(0xFF7E2B69),
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Where',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Color(0xFF7E2B69),
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10, 0, 10, 0),
+                                  child: TextFormField(
+                                    controller: locationTextFieldController,
+                                    onChanged: (_) => EasyDebounce.debounce(
+                                      'locationTextFieldController',
+                                      Duration(milliseconds: 2000),
+                                      () => setState(() {}),
+                                    ),
+                                    autofocus: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      hintText: 'Where were you?',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      suffixIcon: locationTextFieldController
+                                              .text.isNotEmpty
+                                          ? InkWell(
+                                              onTap: () => setState(
+                                                () =>
+                                                    locationTextFieldController
+                                                        ?.clear(),
+                                              ),
+                                              child: Icon(
+                                                Icons.clear,
+                                                color: Color(0xFF757575),
+                                                size: 22,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
+                                        .override(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                    maxLines: 1,
+                                    validator: (val) {
+                                      if (val == null || val.isEmpty) {
+                                        return 'Field is required';
+                                      }
+                                      if (val.length < 2) {
+                                        return 'Requires at least 2 characters.';
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      elevation: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          border: Border.all(
+                            color: Color(0xFF7E2B69),
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Who',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Color(0xFF7E2B69),
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10, 0, 10, 0),
+                                  child: TextFormField(
+                                    controller: whoTextFieldController,
+                                    onChanged: (_) => EasyDebounce.debounce(
+                                      'whoTextFieldController',
+                                      Duration(milliseconds: 2000),
+                                      () => setState(() {}),
+                                    ),
+                                    autofocus: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      hintText: 'Who were you with?',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      suffixIcon:
+                                          whoTextFieldController.text.isNotEmpty
+                                              ? InkWell(
+                                                  onTap: () => setState(
+                                                    () => whoTextFieldController
+                                                        ?.clear(),
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.clear,
+                                                    color: Color(0xFF757575),
+                                                    size: 22,
+                                                  ),
+                                                )
+                                              : null,
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
+                                        .override(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                    maxLines: 1,
+                                    validator: (val) {
+                                      if (val == null || val.isEmpty) {
+                                        return 'Field is required';
+                                      }
+                                      if (val.length < 2) {
+                                        return 'Requires at least 2 characters.';
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      elevation: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          border: Border.all(
+                            color: Color(0xFF7E2B69),
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'What',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Color(0xFF7E2B69),
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10, 0, 10, 0),
+                                  child: TextFormField(
+                                    controller: whatTextFieldController,
+                                    onChanged: (_) => EasyDebounce.debounce(
+                                      'whatTextFieldController',
+                                      Duration(milliseconds: 2000),
+                                      () => setState(() {}),
+                                    ),
+                                    autofocus: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      hintText: 'What were you doing?',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      suffixIcon: whatTextFieldController
+                                              .text.isNotEmpty
+                                          ? InkWell(
+                                              onTap: () => setState(
+                                                () => whatTextFieldController
+                                                    ?.clear(),
+                                              ),
+                                              child: Icon(
+                                                Icons.clear,
+                                                color: Color(0xFF757575),
+                                                size: 22,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
+                                        .override(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                    maxLines: 1,
+                                    validator: (val) {
+                                      if (val == null || val.isEmpty) {
+                                        return 'Field is required';
+                                      }
+                                      if (val.length < 2) {
+                                        return 'Requires at least 2 characters.';
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      elevation: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          border: Border.all(
+                            color: Color(0xFF7E2B69),
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Emotion',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Color(0xFF7E2B69),
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                              ),
+                              FlutterFlowDropDown(
+                                initialOption: emotionDropDownValue ??=
+                                    'Positive Emotions',
+                                options: [
+                                  'Positive Emotions',
+                                  'Anger / hurt',
+                                  'Grief / sadness',
+                                  'Fear',
+                                  'Guilt / envy / jealousty / shame'
+                                ],
+                                onChanged: (val) =>
+                                    setState(() => emotionDropDownValue = val),
+                                width: 180,
+                                height: 50,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                fillColor: Colors.white,
+                                elevation: 2,
+                                borderColor: Colors.transparent,
+                                borderWidth: 0,
+                                borderRadius: 0,
+                                margin: EdgeInsetsDirectional.fromSTEB(
+                                    12, 4, 12, 4),
+                                hidesUnderline: true,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                     child: Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                         border: Border.all(
@@ -182,29 +567,220 @@ class _AddendtryWidgetState extends State<AddendtryWidget> {
                           width: 1,
                         ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Where',
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SwitchListTile(
+                            value: boundariesSwitchListTileValue ??= false,
+                            onChanged: (newValue) => setState(
+                                () => boundariesSwitchListTileValue = newValue),
+                            title: Text(
+                              'Did you set boundaries?',
                               style: FlutterFlowTheme.of(context)
                                   .bodyText1
                                   .override(
                                     fontFamily: 'Poppins',
                                     color: Color(0xFF7E2B69),
+                                    fontWeight: FontWeight.normal,
                                   ),
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(5, 0, 5, 0),
-                                child: Text(
-                                  'Hello World',
-                                  style: FlutterFlowTheme.of(context).bodyText1,
+                            tileColor: Color(0xFFF5F5F5),
+                            dense: false,
+                            controlAffinity: ListTileControlAffinity.trailing,
+                          ),
+                          SwitchListTile(
+                            value: communicateSwitchListTileValue ??= false,
+                            onChanged: (newValue) => setState(() =>
+                                communicateSwitchListTileValue = newValue),
+                            title: Text(
+                              'Did you communicate honestly?',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF7E2B69),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                            ),
+                            tileColor: Color(0xFFF5F5F5),
+                            dense: false,
+                            controlAffinity: ListTileControlAffinity.trailing,
+                          ),
+                          SwitchListTile(
+                            value: needsSwitchListTileValue ??= false,
+                            onChanged: (newValue) => setState(
+                                () => needsSwitchListTileValue = newValue),
+                            title: Text(
+                              'Did you meet your own needs first?',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF7E2B69),
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                            ),
+                            tileColor: Color(0xFFF5F5F5),
+                            dense: false,
+                            controlAffinity: ListTileControlAffinity.trailing,
+                          ),
+                          SwitchListTile(
+                            value: thinkingSwitchListTileValue ??= false,
+                            onChanged: (newValue) => setState(
+                                () => thinkingSwitchListTileValue = newValue),
+                            title: Text(
+                              'Were you over thinking?',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xFF7E2B69),
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                            ),
+                            tileColor: Color(0xFFF5F5F5),
+                            dense: false,
+                            controlAffinity: ListTileControlAffinity.trailing,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      elevation: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          border: Border.all(
+                            color: Color(0xFF7E2B69),
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Action',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: Color(0xFF7E2B69),
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10, 0, 10, 0),
+                                  child: TextFormField(
+                                    controller: actionTextFieldController,
+                                    onChanged: (_) => EasyDebounce.debounce(
+                                      'actionTextFieldController',
+                                      Duration(milliseconds: 2000),
+                                      () => setState(() {}),
+                                    ),
+                                    autofocus: true,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      hintText: 'How did you use the keys?',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      suffixIcon: actionTextFieldController
+                                              .text.isNotEmpty
+                                          ? InkWell(
+                                              onTap: () => setState(
+                                                () => actionTextFieldController
+                                                    ?.clear(),
+                                              ),
+                                              child: Icon(
+                                                Icons.clear,
+                                                color: Color(0xFF757575),
+                                                size: 22,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
+                                        .override(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                    maxLines: 1,
+                                    validator: (val) {
+                                      if (val == null || val.isEmpty) {
+                                        return 'Field is required';
+                                      }
+                                      if (val.length < 2) {
+                                        return 'Requires at least 2 characters.';
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
                                 ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                    child: Material(
+                      color: Colors.transparent,
+                      elevation: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          border: Border.all(
+                            color: Color(0xFF7E2B69),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: SwitchListTile(
+                                value: improveSwitchListTileValue ??= true,
+                                onChanged: (newValue) => setState(() =>
+                                    improveSwitchListTileValue = newValue),
+                                title: Text(
+                                  'Did things improve?',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: Color(0xFF7E2B69),
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                ),
+                                tileColor: Color(0xFFF5F5F5),
+                                dense: false,
+                                controlAffinity:
+                                    ListTileControlAffinity.trailing,
                               ),
                             ),
                           ],
@@ -212,64 +788,84 @@ class _AddendtryWidgetState extends State<AddendtryWidget> {
                       ),
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    FlutterFlowIconButton(
-                      borderColor: Colors.transparent,
-                      borderRadius: 30,
-                      borderWidth: 1,
-                      buttonSize: 60,
-                      icon: Icon(
-                        Icons.my_location_sharp,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        print('IconButton pressed ...');
-                      },
-                    ),
-                    Expanded(
-                      child: Text(
-                        FFAppState().entryLocation,
-                        style: FlutterFlowTheme.of(context).bodyText1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(0, 0),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                  child: FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
-                    },
-                    text: 'Save',
-                    options: FFButtonOptions(
-                      width: 130,
-                      height: 40,
-                      color: Color(0xFF7E2B69),
-                      textStyle:
-                          FlutterFlowTheme.of(context).subtitle2.override(
-                                fontFamily: 'Poppins',
-                                color: Colors.white,
+                  Align(
+                    alignment: AlignmentDirectional(0, 0),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          if (formKey.currentState == null ||
+                              !formKey.currentState.validate()) {
+                            return;
+                          }
+
+                          if (datePicked == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Please select a date',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBtnText,
+                                      ),
+                                ),
+                                duration: Duration(milliseconds: 4000),
+                                backgroundColor: Color(0xFF7E2B69),
                               ),
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                        width: 1,
+                            );
+                            return;
+                          }
+
+                          final fatigueListCreateData =
+                              createFatigueListRecordData(
+                            date: datePicked,
+                            mood: emotionDropDownValue,
+                            location: locationTextFieldController.text,
+                            uid: currentUserUid,
+                            who: whoTextFieldController.text,
+                            whatDoing: whatTextFieldController.text,
+                            setBoundaries: boundariesSwitchListTileValue,
+                            communicateHonestly: communicateSwitchListTileValue,
+                            meetYourNeeds: needsSwitchListTileValue,
+                            overThinking: thinkingSwitchListTileValue,
+                            action: actionTextFieldController.text,
+                            didThingsImprove: improveSwitchListTileValue,
+                          );
+                          await FatigueListRecord.collection
+                              .doc()
+                              .set(fatigueListCreateData);
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FatiguelistWidget(),
+                            ),
+                          );
+                        },
+                        text: 'Save',
+                        options: FFButtonOptions(
+                          width: 130,
+                          height: 40,
+                          color: Color(0xFF7E2B69),
+                          textStyle:
+                              FlutterFlowTheme.of(context).subtitle2.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

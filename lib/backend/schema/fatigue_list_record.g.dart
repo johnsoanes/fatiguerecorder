@@ -49,13 +49,61 @@ class _$FatigueListRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.userreference;
+    value = object.who;
     if (value != null) {
       result
-        ..add('userreference')
+        ..add('who')
         ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType(Object)])));
+            specifiedType: const FullType(String)));
+    }
+    value = object.whatDoing;
+    if (value != null) {
+      result
+        ..add('whatDoing')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.setBoundaries;
+    if (value != null) {
+      result
+        ..add('setBoundaries')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.communicateHonestly;
+    if (value != null) {
+      result
+        ..add('communicateHonestly')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.meetYourNeeds;
+    if (value != null) {
+      result
+        ..add('meetYourNeeds')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.overThinking;
+    if (value != null) {
+      result
+        ..add('overThinking')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.action;
+    if (value != null) {
+      result
+        ..add('action')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.didThingsImprove;
+    if (value != null) {
+      result
+        ..add('didThingsImprove')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
     }
     value = object.reference;
     if (value != null) {
@@ -96,11 +144,37 @@ class _$FatigueListRecordSerializer
           result.uid = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'userreference':
-          result.userreference = serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      DocumentReference, const [const FullType(Object)]))
-              as DocumentReference<Object>;
+        case 'who':
+          result.who = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'whatDoing':
+          result.whatDoing = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'setBoundaries':
+          result.setBoundaries = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'communicateHonestly':
+          result.communicateHonestly = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'meetYourNeeds':
+          result.meetYourNeeds = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'overThinking':
+          result.overThinking = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+        case 'action':
+          result.action = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'didThingsImprove':
+          result.didThingsImprove = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'Document__Reference__Field':
           result.reference = serializers.deserialize(value,
@@ -125,7 +199,21 @@ class _$FatigueListRecord extends FatigueListRecord {
   @override
   final String uid;
   @override
-  final DocumentReference<Object> userreference;
+  final String who;
+  @override
+  final String whatDoing;
+  @override
+  final bool setBoundaries;
+  @override
+  final bool communicateHonestly;
+  @override
+  final bool meetYourNeeds;
+  @override
+  final bool overThinking;
+  @override
+  final String action;
+  @override
+  final bool didThingsImprove;
   @override
   final DocumentReference<Object> reference;
 
@@ -138,7 +226,14 @@ class _$FatigueListRecord extends FatigueListRecord {
       this.mood,
       this.location,
       this.uid,
-      this.userreference,
+      this.who,
+      this.whatDoing,
+      this.setBoundaries,
+      this.communicateHonestly,
+      this.meetYourNeeds,
+      this.overThinking,
+      this.action,
+      this.didThingsImprove,
       this.reference})
       : super._();
 
@@ -158,7 +253,14 @@ class _$FatigueListRecord extends FatigueListRecord {
         mood == other.mood &&
         location == other.location &&
         uid == other.uid &&
-        userreference == other.userreference &&
+        who == other.who &&
+        whatDoing == other.whatDoing &&
+        setBoundaries == other.setBoundaries &&
+        communicateHonestly == other.communicateHonestly &&
+        meetYourNeeds == other.meetYourNeeds &&
+        overThinking == other.overThinking &&
+        action == other.action &&
+        didThingsImprove == other.didThingsImprove &&
         reference == other.reference;
   }
 
@@ -167,10 +269,26 @@ class _$FatigueListRecord extends FatigueListRecord {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, date.hashCode), mood.hashCode),
-                    location.hashCode),
-                uid.hashCode),
-            userreference.hashCode),
+                $jc(
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc(
+                                            $jc(
+                                                $jc($jc(0, date.hashCode),
+                                                    mood.hashCode),
+                                                location.hashCode),
+                                            uid.hashCode),
+                                        who.hashCode),
+                                    whatDoing.hashCode),
+                                setBoundaries.hashCode),
+                            communicateHonestly.hashCode),
+                        meetYourNeeds.hashCode),
+                    overThinking.hashCode),
+                action.hashCode),
+            didThingsImprove.hashCode),
         reference.hashCode));
   }
 
@@ -181,7 +299,14 @@ class _$FatigueListRecord extends FatigueListRecord {
           ..add('mood', mood)
           ..add('location', location)
           ..add('uid', uid)
-          ..add('userreference', userreference)
+          ..add('who', who)
+          ..add('whatDoing', whatDoing)
+          ..add('setBoundaries', setBoundaries)
+          ..add('communicateHonestly', communicateHonestly)
+          ..add('meetYourNeeds', meetYourNeeds)
+          ..add('overThinking', overThinking)
+          ..add('action', action)
+          ..add('didThingsImprove', didThingsImprove)
           ..add('reference', reference))
         .toString();
   }
@@ -207,10 +332,41 @@ class FatigueListRecordBuilder
   String get uid => _$this._uid;
   set uid(String uid) => _$this._uid = uid;
 
-  DocumentReference<Object> _userreference;
-  DocumentReference<Object> get userreference => _$this._userreference;
-  set userreference(DocumentReference<Object> userreference) =>
-      _$this._userreference = userreference;
+  String _who;
+  String get who => _$this._who;
+  set who(String who) => _$this._who = who;
+
+  String _whatDoing;
+  String get whatDoing => _$this._whatDoing;
+  set whatDoing(String whatDoing) => _$this._whatDoing = whatDoing;
+
+  bool _setBoundaries;
+  bool get setBoundaries => _$this._setBoundaries;
+  set setBoundaries(bool setBoundaries) =>
+      _$this._setBoundaries = setBoundaries;
+
+  bool _communicateHonestly;
+  bool get communicateHonestly => _$this._communicateHonestly;
+  set communicateHonestly(bool communicateHonestly) =>
+      _$this._communicateHonestly = communicateHonestly;
+
+  bool _meetYourNeeds;
+  bool get meetYourNeeds => _$this._meetYourNeeds;
+  set meetYourNeeds(bool meetYourNeeds) =>
+      _$this._meetYourNeeds = meetYourNeeds;
+
+  bool _overThinking;
+  bool get overThinking => _$this._overThinking;
+  set overThinking(bool overThinking) => _$this._overThinking = overThinking;
+
+  String _action;
+  String get action => _$this._action;
+  set action(String action) => _$this._action = action;
+
+  bool _didThingsImprove;
+  bool get didThingsImprove => _$this._didThingsImprove;
+  set didThingsImprove(bool didThingsImprove) =>
+      _$this._didThingsImprove = didThingsImprove;
 
   DocumentReference<Object> _reference;
   DocumentReference<Object> get reference => _$this._reference;
@@ -228,7 +384,14 @@ class FatigueListRecordBuilder
       _mood = $v.mood;
       _location = $v.location;
       _uid = $v.uid;
-      _userreference = $v.userreference;
+      _who = $v.who;
+      _whatDoing = $v.whatDoing;
+      _setBoundaries = $v.setBoundaries;
+      _communicateHonestly = $v.communicateHonestly;
+      _meetYourNeeds = $v.meetYourNeeds;
+      _overThinking = $v.overThinking;
+      _action = $v.action;
+      _didThingsImprove = $v.didThingsImprove;
       _reference = $v.reference;
       _$v = null;
     }
@@ -254,7 +417,14 @@ class FatigueListRecordBuilder
             mood: mood,
             location: location,
             uid: uid,
-            userreference: userreference,
+            who: who,
+            whatDoing: whatDoing,
+            setBoundaries: setBoundaries,
+            communicateHonestly: communicateHonestly,
+            meetYourNeeds: meetYourNeeds,
+            overThinking: overThinking,
+            action: action,
+            didThingsImprove: didThingsImprove,
             reference: reference);
     replace(_$result);
     return _$result;

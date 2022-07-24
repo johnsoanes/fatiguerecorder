@@ -14,8 +14,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  FFAppState(); // Initialize FFAppState
-
   runApp(MyApp());
 }
 
@@ -78,10 +76,14 @@ class _MyAppState extends State<MyApp> {
       home: initialUser == null || displaySplashImage
           ? Container(
               color: Colors.transparent,
-              child: Builder(
-                builder: (context) => Image.asset(
-                  'assets/images/IMG_1741.jpeg',
-                  fit: BoxFit.contain,
+              child: Center(
+                child: Builder(
+                  builder: (context) => Image.asset(
+                    'assets/images/IMG_1741.jpeg',
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             )

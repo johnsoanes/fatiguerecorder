@@ -85,7 +85,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 'Receive Push notifications from our application on a semi regular basis.',
                 style: FlutterFlowTheme.of(context).bodyText2,
               ),
-              activeColor: FlutterFlowTheme.of(context).primaryColor,
+              activeColor: Color(0xFF7E2B69),
               activeTrackColor: Color(0x8A4B39EF),
               dense: false,
               controlAffinity: ListTileControlAffinity.trailing,
@@ -104,7 +104,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               'Receive email notifications from our marketing team about new features.',
               style: FlutterFlowTheme.of(context).bodyText2,
             ),
-            activeColor: Color(0xFF4B39EF),
+            activeColor: Color(0xFF7E2B69),
             activeTrackColor: Color(0xFF3B2DB6),
             dense: false,
             controlAffinity: ListTileControlAffinity.trailing,
@@ -122,7 +122,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               'Allow us to track your location, this helps keep track of spending and keeps you safe.',
               style: FlutterFlowTheme.of(context).bodyText2,
             ),
-            activeColor: Color(0xFF4B39EF),
+            activeColor: Color(0xFF7E2B69),
             activeTrackColor: Color(0xFF3B2DB6),
             dense: false,
             controlAffinity: ListTileControlAffinity.trailing,
@@ -138,7 +138,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               options: FFButtonOptions(
                 width: 190,
                 height: 50,
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: Color(0xFF7E2B69),
                 textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: 'Lexend Deca',
                       color: Colors.white,
@@ -172,7 +172,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               options: FFButtonOptions(
                 width: 190,
                 height: 50,
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: Color(0xFF7E2B69),
                 textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: 'Lexend Deca',
                       color: Colors.white,

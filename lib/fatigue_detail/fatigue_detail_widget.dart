@@ -44,7 +44,7 @@ class _FatigueDetailWidgetState extends State<FatigueDetailWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF2E295C),
+        backgroundColor: Color(0xFF7E2B69),
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
@@ -61,7 +61,7 @@ class _FatigueDetailWidgetState extends State<FatigueDetailWidget> {
           },
         ),
         title: Text(
-          'Entry Detail',
+          'Energy  Detail',
           style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Poppins',
                 color: Colors.white,

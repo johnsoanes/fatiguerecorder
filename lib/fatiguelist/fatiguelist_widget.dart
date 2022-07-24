@@ -53,10 +53,10 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF2E295C),
+        backgroundColor: Color(0xFF7E2B69),
         automaticallyImplyLeading: false,
         title: Text(
-          'Entries',
+          'Energy Records',
           style: FlutterFlowTheme.of(context).title2.override(
                 fontFamily: 'Poppins',
                 color: Colors.white,
@@ -97,7 +97,7 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
             ),
           );
         },
-        backgroundColor: Color(0xFF2E295C),
+        backgroundColor: Color(0xFF7E2B69),
         elevation: 8,
         child: Icon(
           Icons.add,

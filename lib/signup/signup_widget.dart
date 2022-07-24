@@ -51,10 +51,10 @@ class _SignupWidgetState extends State<SignupWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Fatigue Tracker',
+                    'Energy Tracker',
                     style: FlutterFlowTheme.of(context).title1.override(
                           fontFamily: 'Poppins',
-                          color: Color(0xFF2E295C),
+                          color: Color(0xFF7E2B69),
                         ),
                   ),
                 ],
@@ -334,7 +334,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                       options: FFButtonOptions(
                         width: 150,
                         height: 50,
-                        color: Color(0xFF2E295C),
+                        color: Color(0xFF7E2B69),
                         textStyle:
                             FlutterFlowTheme.of(context).subtitle2.override(
                                   fontFamily: 'Poppins',

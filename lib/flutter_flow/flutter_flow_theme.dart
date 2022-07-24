@@ -26,6 +26,7 @@ abstract class FlutterFlowTheme {
   Color tertiary400;
   Color textColor;
   Color customColor1;
+  Color backgroundComponents;
 
   String get title1Family => typography.title1Family;
   TextStyle get title1 => typography.title1;
@@ -64,6 +65,7 @@ class LightModeTheme extends FlutterFlowTheme {
   Color tertiary400 = Color(0xFF39D2C0);
   Color textColor = Color(0xFF1E2429);
   Color customColor1 = Color(0xFF2FB73C);
+  Color backgroundComponents = Color(0xFF1D2428);
 }
 
 abstract class Typography {

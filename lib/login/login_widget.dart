@@ -51,10 +51,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Fatigue Tracker',
+                      'Energy Tracker',
                       style: FlutterFlowTheme.of(context).title1.override(
                             fontFamily: 'Poppins',
-                            color: Color(0xFF2E295C),
+                            color: Color(0xFF7E2B69),
                           ),
                     ),
                   ],
@@ -241,7 +241,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         options: FFButtonOptions(
                           width: 150,
                           height: 50,
-                          color: Color(0xFF2E295C),
+                          color: Color(0xFF7E2B69),
                           textStyle: FlutterFlowTheme.of(context)
                               .bodyText2
                               .override(
@@ -280,7 +280,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         options: FFButtonOptions(
                           width: 150,
                           height: 50,
-                          color: Color(0xFF2E295C),
+                          color: Color(0xFF7E2B69),
                           textStyle:
                               FlutterFlowTheme.of(context).subtitle1.override(
                                     fontFamily: 'Poppins',

@@ -158,6 +158,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                             EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      keyboardType: TextInputType.emailAddress,
                     ),
                   ),
                 ),

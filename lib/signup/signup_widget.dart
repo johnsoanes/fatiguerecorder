@@ -1,11 +1,11 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
-import '../fatiguelist/fatiguelist_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../login/login_widget.dart';
+import '../main.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -326,7 +326,8 @@ class _SignupWidgetState extends State<SignupWidget> {
                         await Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => FatiguelistWidget(),
+                            builder: (context) =>
+                                NavBarPage(initialPage: 'fatiguelist'),
                           ),
                           (r) => false,
                         );
@@ -381,7 +382,8 @@ class _SignupWidgetState extends State<SignupWidget> {
                           await Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => FatiguelistWidget(),
+                              builder: (context) =>
+                                  NavBarPage(initialPage: 'fatiguelist'),
                             ),
                             (r) => false,
                           );
@@ -410,7 +412,8 @@ class _SignupWidgetState extends State<SignupWidget> {
                           await Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => FatiguelistWidget(),
+                              builder: (context) =>
+                                  NavBarPage(initialPage: 'fatiguelist'),
                             ),
                             (r) => false,
                           );

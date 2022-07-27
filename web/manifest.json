@@ -1,6 +1,6 @@
 {
-    "name": "FatigueRecorder",
-    "short_name": "FatigueRecorder",
+    "name": "Energy Recorder",
+    "short_name": "Energy Recorder",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

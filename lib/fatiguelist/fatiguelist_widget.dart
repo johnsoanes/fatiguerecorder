@@ -3,6 +3,7 @@ import '../auth/auth_util.dart';
 import '../auth/firebase_user_provider.dart';
 import '../backend/backend.dart';
 import '../fatigue_detail/fatigue_detail_widget.dart';
+import '../flutter_flow/flutter_flow_ad_banner.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -21,7 +22,6 @@ class FatiguelistWidget extends StatefulWidget {
 
 class _FatiguelistWidgetState extends State<FatiguelistWidget> {
   Completer<List<FatigueListRecord>> _firestoreRequestCompleter;
-  TextEditingController textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -43,8 +43,6 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
         ),
       );
     });
-
-    textController = TextEditingController();
   }
 
   @override
@@ -147,85 +145,11 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.95,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          width: 2,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
-                              child: Icon(
-                                Icons.search_rounded,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                size: 24,
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
-                                child: TextFormField(
-                                  controller: textController,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Search events here...',
-                                    labelStyle:
-                                        FlutterFlowTheme.of(context).bodyText2,
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1,
-                                      ),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(4.0),
-                                        topRight: Radius.circular(4.0),
-                                      ),
-                                    ),
-                                  ),
-                                  style: FlutterFlowTheme.of(context).bodyText1,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: AlignmentDirectional(0.95, 0),
-                                child: Icon(
-                                  Icons.tune_rounded,
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryText,
-                                  size: 24,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  FlutterFlowAdBanner(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    showsTestAd: true,
+                    iOSAdUnitID: 'ca-app-pub-7682493363331350/3387747258',
                   ),
                 ],
               ),

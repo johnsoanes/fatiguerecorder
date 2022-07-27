@@ -1,13 +1,13 @@
 import '../auth/auth_util.dart';
 import '../auth/firebase_user_provider.dart';
 import '../backend/backend.dart';
-import '../fatiguelist/fatiguelist_widget.dart';
 import '../flutter_flow/flutter_flow_drop_down.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../login/login_widget.dart';
+import '../main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +142,7 @@ class _FatigueDetailWidgetState extends State<FatigueDetailWidget> {
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => FatiguelistWidget(),
+                  builder: (context) => NavBarPage(initialPage: 'fatiguelist'),
                 ),
               );
             },
@@ -707,7 +707,7 @@ class _FatigueDetailWidgetState extends State<FatigueDetailWidget> {
                 Align(
                   alignment: AlignmentDirectional(0, 0),
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 15),
                     child: FFButtonWidget(
                       onPressed: () async {
                         if (formKey.currentState == null ||
@@ -742,7 +742,8 @@ class _FatigueDetailWidgetState extends State<FatigueDetailWidget> {
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => FatiguelistWidget(),
+                            builder: (context) =>
+                                NavBarPage(initialPage: 'fatiguelist'),
                           ),
                         );
                       },

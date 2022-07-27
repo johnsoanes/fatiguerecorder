@@ -1,4 +1,4 @@
-# FatigueRecorder
+# Energy Recorder
 
 A new Flutter project.
 

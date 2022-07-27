@@ -1,19 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
-class FatigueRecorderFirebaseUser {
-  FatigueRecorderFirebaseUser(this.user);
+class EnergyRecorderFirebaseUser {
+  EnergyRecorderFirebaseUser(this.user);
   User user;
   bool get loggedIn => user != null;
 }
 
-FatigueRecorderFirebaseUser currentUser;
+EnergyRecorderFirebaseUser currentUser;
 bool get loggedIn => currentUser?.loggedIn ?? false;
-Stream<FatigueRecorderFirebaseUser> fatigueRecorderFirebaseUserStream() =>
+Stream<EnergyRecorderFirebaseUser> energyRecorderFirebaseUserStream() =>
     FirebaseAuth.instance
         .authStateChanges()
         .debounce((user) => user == null && !loggedIn
             ? TimerStream(true, const Duration(seconds: 1))
             : Stream.value(user))
-        .map<FatigueRecorderFirebaseUser>(
-            (user) => currentUser = FatigueRecorderFirebaseUser(user));
+        .map<EnergyRecorderFirebaseUser>(
+            (user) => currentUser = EnergyRecorderFirebaseUser(user));

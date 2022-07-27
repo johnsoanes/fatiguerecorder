@@ -8,6 +8,7 @@ import 'auth/auth_util.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'index.dart';
 
 void main() async {
@@ -30,8 +31,8 @@ class _MyAppState extends State<MyApp> {
   Locale _locale;
   ThemeMode _themeMode = ThemeMode.system;
 
-  Stream<FatigueRecorderFirebaseUser> userStream;
-  FatigueRecorderFirebaseUser initialUser;
+  Stream<EnergyRecorderFirebaseUser> userStream;
+  EnergyRecorderFirebaseUser initialUser;
   bool displaySplashImage = true;
 
   final authUserSub = authenticatedUserStream.listen((_) {});
@@ -39,7 +40,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    userStream = fatigueRecorderFirebaseUserStream()
+    userStream = energyRecorderFirebaseUserStream()
       ..listen((user) => initialUser ?? setState(() => initialUser = user));
     Future.delayed(
       Duration(seconds: 1),
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FatigueRecorder',
+      title: 'Energy Recorder',
       localizationsDelegates: [
         FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -88,8 +89,71 @@ class _MyAppState extends State<MyApp> {
               ),
             )
           : currentUser.loggedIn
-              ? FatiguelistWidget()
+              ? NavBarPage()
               : LoginWidget(),
+    );
+  }
+}
+
+class NavBarPage extends StatefulWidget {
+  NavBarPage({Key key, this.initialPage}) : super(key: key);
+
+  final String initialPage;
+
+  @override
+  _NavBarPageState createState() => _NavBarPageState();
+}
+
+/// This is the private State class that goes with NavBarPage.
+class _NavBarPageState extends State<NavBarPage> {
+  String _currentPage = 'fatiguelist';
+
+  @override
+  void initState() {
+    super.initState();
+    _currentPage = widget.initialPage ?? _currentPage;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tabs = {
+      'fatiguelist': FatiguelistWidget(),
+      'fatigueGraph': FatigueGraphWidget(),
+    };
+    final currentIndex = tabs.keys.toList().indexOf(_currentPage);
+    return Scaffold(
+      body: tabs[_currentPage],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (i) => setState(() => _currentPage = tabs.keys.toList()[i]),
+        backgroundColor: Colors.white,
+        selectedItemColor: FlutterFlowTheme.of(context).primaryColor,
+        unselectedItemColor: Color(0x8A000000),
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.list,
+              size: 24,
+            ),
+            activeIcon: Icon(
+              Icons.list_sharp,
+            ),
+            label: 'Records',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.insert_chart,
+              size: 24,
+            ),
+            label: 'Graph',
+            tooltip: '',
+          )
+        ],
+      ),
     );
   }
 }

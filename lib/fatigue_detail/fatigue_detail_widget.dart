@@ -46,7 +46,7 @@ class _FatigueDetailWidgetState extends State<FatigueDetailWidget> {
   void initState() {
     super.initState();
     // On page load action.
-    SchedulerBinding.instance?.addPostFrameCallback((_) async {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (loggedIn) {
         return;
       }

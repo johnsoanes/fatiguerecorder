@@ -3,7 +3,6 @@ import '../auth/auth_util.dart';
 import '../auth/firebase_user_provider.dart';
 import '../backend/backend.dart';
 import '../fatigue_detail/fatigue_detail_widget.dart';
-import '../flutter_flow/flutter_flow_ad_banner.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -28,7 +27,7 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
   void initState() {
     super.initState();
     // On page load action.
-    SchedulerBinding.instance?.addPostFrameCallback((_) async {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (loggedIn) {
         return;
       }
@@ -133,28 +132,6 @@ class _FatiguelistWidgetState extends State<FatiguelistWidget> {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 90,
-            decoration: BoxDecoration(
-              color: FlutterFlowTheme.of(context).secondaryBackground,
-            ),
-            child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FlutterFlowAdBanner(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    showsTestAd: true,
-                    iOSAdUnitID: 'ca-app-pub-7682493363331350/3387747258',
-                  ),
-                ],
-              ),
-            ),
-          ),
           Expanded(
             child: Align(
               alignment: AlignmentDirectional(0, 0),
